@@ -1,0 +1,33 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:js": "./node_modules/browserify/bin/cmd.js -g es2020 index.js -o public/bundle.js",
+    "build:templates": "./node_modules/pug-cli/index.js templates/index.pug -o public/",
+    "minify:css": "./node_modules/clean-css-cli/bin/cleancss --inline all -o public/style.min.css assets/css/*.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "unaffiliated",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "animate.css": "^3.5.2",
+    "debug": "^3.0.1",
+    "document-ready": "^2.0.1",
+    "google-maps": "^3.2.1",
+    "knockout": "^3.4.2",
+    "normalize.css": "^7.0.0",
+    "ramda": "^0.24.1"
+  },
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "browserify-transform-tools": "^1.7.0",
+    "clean-css-cli": "^4.1.10",
+    "es2020": "^1.1.9",
+    "lighthouse": "^2.4.0",
+    "pug-cli": "^1.0.0-alpha6",
+    "uglifyify": "^4.0.4"
+  }
+}

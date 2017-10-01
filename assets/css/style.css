@@ -1,0 +1,109 @@
+@import url('../../node_modules/normalize.css/normalize.css');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('http://weloveiconfonts.com/api/?family=entypo');
+
+/* thanks to author Stingy (https://codepen.io/rbardtke/pen/nfkdb) for offcanvas css */
+
+*,
+*:before, 
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, 
+body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #0b2161;
+  overflow-x: hidden;
+}
+
+[class*="entypo-"]:before {
+  font-family: 'Entypo', sans-serif;
+}
+
+input[data-function*="toggle-offcanvas"] {
+  position: absolute;
+  opacity: 0;
+}
+
+input[data-function*="toggle-offcanvas"]:checked ~ label[data-function*="toggle-offcanvas"] {
+  transform: translate3d(260px, 0, 0);
+}
+
+input[data-function*="toggle-offcanvas"]:checked ~ .offcanvas {
+  transform: translate3d(0, 0, 0);
+}
+
+label[data-function*="toggle-offcanvas"] {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+  z-index: 1;
+  display: block;
+  width: 42px;
+  height: 42px;
+  text-align: center;
+  color: #f2f2f2;
+  cursor: pointer;
+  transform: translate3d(0, 0, 0);
+  transition: transform .3s;
+}
+
+.wrapper {
+  display: flex;
+  min-height: 100%;
+}
+
+.content {
+  flex: 1;
+  position: relative;
+  transform: translate3d(0, 0, 0);
+  transition: transform .3s;
+}
+
+.offcanvas {
+  transform: translate3d(-260px, 0, 0);
+  position: absolute;
+  padding-top: 20px;
+  height: 100%;
+  width: 260px;
+  left: 0;
+  z-index: 2;
+  color: #f2f2f2;
+  background-color: #0b2161;
+  transition: all .3s;
+}
+
+.offcanvas h2 {
+  text-align: center;
+  margin-bottom: 23px;
+}
+
+.offcanvas ul {
+  list-style-type: none;
+}
+
+#filter {
+  width: 100%;
+  padding: 10px;
+  border: none;
+}
+
+#map {
+  background-color: #ffffff;
+  position: absolute;
+  left: 0;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+}
+
+.entypo-menu {
+  font-size: 32px;
+}
