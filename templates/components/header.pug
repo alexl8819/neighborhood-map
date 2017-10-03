@@ -3,8 +3,8 @@ header
   label.entypo-menu(data-function="toggle-offcanvas", for="toggle")
   div.offcanvas
     h2 Locations
-    input#filter(type="text", placeholder="BART San Francisco", data-bind="textInput: search")
+    input#search(type="text", placeholder="BART San Francisco", data-bind="textInput: search")
     nav
-      ul.list(data-bind="foreach: filtered")
+      ul#locations(data-bind="foreach: filtered")
         li(data-bind="text: name")
 

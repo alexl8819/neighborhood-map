@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:js": "./node_modules/browserify/bin/cmd.js -g es2020 index.js -o public/bundle.js",
+    "build:js": "./node_modules/browserify/bin/cmd.js -g es2020 -g uglifyify index.js -o public/bundle.js",
     "build:templates": "./node_modules/pug-cli/index.js templates/index.pug -o public/",
     "minify:css": "./node_modules/clean-css-cli/bin/cleancss --inline all -o public/style.min.css assets/css/*.css",
     "test": "echo \"Error: no test specified\" && exit 1"

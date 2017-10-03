@@ -1,6 +1,6 @@
 const ready = require('document-ready')
 const GoogleMapsLoader = require('google-maps')
-const applyBindings = require('knockout').applyBindings
+const applyBindings = require('knockout/build/output/knockout-latest').applyBindings
 
 const FilteredLocationViewModel = require('./lib/viewmodels/location')
 
@@ -12,6 +12,7 @@ GoogleMapsLoader.REGION = config.google_maps_api.region
 
 ready(() => {
   const container = document.querySelector('#map')
+  const markers = new Map()
 
   if (!container) {
     throw new Error('Map container (#map) not found. Unable to initialize google maps')
@@ -26,18 +27,30 @@ ready(() => {
       zoom: 11,
       fullscreenControl: true
     })
-    
-    //flvm.search.subscribe(flvm.update.bind(flvm))
-    
-    /*
-    let marker = new google.maps.Marker({
-      position: {},
-      title: 'Test'
+
+    // Filter out markers on changes
+    flvm.filtered.subscribe((changes) => {
+      const names = changes.map(change => change.name)
+      // Clear out existing markers
+      markers.forEach((pair) => {
+        if (names.indexOf(pair.title) === -1) {
+          pair.setVisible(false)
+        } else {
+          pair.setVisible(true)
+        }
+      })
     })
-    // to add -> marker.setMap(map)
-    // to delete -> marker.setMap(null) && marker = null
-      */
+
+    // Set initial markers from computed
+    flvm.filtered().forEach((location) => {
+      let marker = new google.maps.Marker({
+        title: location.name,
+        position: location.coords
+      })
+      marker.setMap(map)
+      markers.set(location.name, marker)
+    })
+
+    applyBindings(flvm)
   })
-  
-  applyBindings(flvm)
 })

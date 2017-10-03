@@ -13,7 +13,7 @@
       "name": "12th St. Oakland City Center Station",
       "coords": {
         "lat": 37.8036197,
-        "lng": 122.2738137
+        "lng": -122.2738137
       }
     },
     {
@@ -28,6 +28,13 @@
       "coords": {
         "lat": 37.8088376,
         "lng": -122.2705416
+      }
+    },
+    {
+      "name": "24th St. Mission Station",
+      "coords": {
+        "lat": 37.7522493,
+        "lng": -122.4206475
       }
     }
   ]
