@@ -37,18 +37,25 @@ module.exports={
         "lat": 37.7522493,
         "lng": -122.4206475
       }
+    },
+    {
+      "name": "Ashby Bart Station",
+      "coords": {
+        "lat": 37.8528871,
+        "lng": -122.2721716
+      }
     }
   ]
 }
 
 },{}],2:[function(require,module,exports){
-var ready=require("document-ready"),GoogleMapsLoader=require("google-maps/lib/Google.min"),applyBindings=require("knockout/build/output/knockout-latest").applyBindings,FilteredLocationViewModel=require("./lib/viewmodels/location"),config=require("./config.json");GoogleMapsLoader.KEY=config.google_maps_api.key,GoogleMapsLoader.LANGUAGE=config.google_maps_api.language,GoogleMapsLoader.REGION=config.google_maps_api.region,ready(function(){var e=document.querySelector("#map"),o=new Map;if(!e)throw new Error("Map container (#map) not found. Unable to initialize google maps");var i=new FilteredLocationViewModel(config.default_locations||[]);GoogleMapsLoader.load(function(n){var a=new n.maps.Map(e,{center:config.center,zoom:11,fullscreenControl:!0});i.filtered.subscribe(function(e){var i=e.map(function(e){return e.name});o.forEach(function(e){-1===i.indexOf(e.title)?e.setVisible(!1):e.setVisible(!0)})}),i.filtered().forEach(function(e){var i=new n.maps.Marker({title:e.name,position:e.coords});i.setMap(a),o.set(e.name,i)}),applyBindings(i)})});
+var ready=require("document-ready"),GoogleMapsLoader=require("google-maps"),applyBindings=require("knockout/build/output/knockout-latest").applyBindings,FilteredLocationViewModel=require("./lib/viewmodels/location"),config=require("./config.json");GoogleMapsLoader.KEY=config.google_maps_api.key,GoogleMapsLoader.LANGUAGE=config.google_maps_api.language,GoogleMapsLoader.REGION=config.google_maps_api.region,ready(function(){var e=document.querySelector("#map"),o=new Map;if(!e)throw new Error("Map container not found. Unable to initialize google maps");var n=new FilteredLocationViewModel(config.default_locations||[]);GoogleMapsLoader.load(function(a){var i=new a.maps.Map(e,{center:config.center,zoom:11,fullscreenControl:!0});n.filtered.subscribe(function(e){var n=e.map(function(e){return e.name});o.forEach(function(e){-1===n.indexOf(e.title)?e.setVisible(!1):e.setVisible(!0)})}),n.filtered().forEach(function(e){var n=new a.maps.InfoWindow({content:"<h3>"+e.name+"</h3>"}),r=new a.maps.Marker({title:e.name,position:e.coords,animation:a.maps.Animation.DROP});r.addListener("click",function(){n.open(i,r)}),r.setMap(i),o.has(e.name)||o.set(e.name,r)}),applyBindings(n)})});
 
-},{"./config.json":1,"./lib/viewmodels/location":4,"document-ready":6,"google-maps/lib/Google.min":7,"knockout/build/output/knockout-latest":8}],3:[function(require,module,exports){
+},{"./config.json":1,"./lib/viewmodels/location":4,"document-ready":6,"google-maps":7,"knockout/build/output/knockout-latest":8}],3:[function(require,module,exports){
 module.exports=class t{constructor(t,s){this.name=t,this.coords=s}static create(s,e){return new t(s,e)}};
 
 },{}],4:[function(require,module,exports){
-var observable=require("knockout/build/output/knockout-latest").observable,observableArray=require("knockout/build/output/knockout-latest").observableArray,pureComputed=require("knockout/build/output/knockout-latest").pureComputed,arrayFilter=require("knockout/build/output/knockout-latest").utils.arrayFilter,Location=require("../models/location");module.exports=class{constructor(o=[]){var t=this;this.locations=observableArray(o.map(function(o){return Location.create(o.name,o.coords)})),this.search=observable(""),this.filtered=pureComputed(function(){var o=t.search();return o?arrayFilter(t.locations(),function(t){return t.name.toLowerCase().indexOf(o.toLowerCase())>-1}):t.locations()},this)}};
+var observable=require("knockout/build/output/knockout-latest").observable,observableArray=require("knockout/build/output/knockout-latest").observableArray,pureComputed=require("knockout/build/output/knockout-latest").pureComputed,arrayFilter=require("knockout/build/output/knockout-latest").utils.arrayFilter,Location=require("../models/location");module.exports=class{constructor(e=[]){var t=this;this.locations=observableArray(e.map(function(e){return Location.create(e.name,e.coords)})),this.search=observable(""),this.active=observable(""),this.selected=pureComputed(function(){t.active()},this),this.filtered=pureComputed(function(){var e=t.search();return e?arrayFilter(t.locations(),function(t){return t.name.toLowerCase().indexOf(e.toLowerCase())>-1}):t.locations()},this),this.select=function(e){console.log(e)}}};
 
 },{"../models/location":3,"knockout/build/output/knockout-latest":8}],5:[function(require,module,exports){
 (function (global){

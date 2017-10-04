@@ -15,7 +15,8 @@ ready(() => {
   const markers = new Map()
 
   if (!container) {
-    throw new Error('Map container (#map) not found. Unable to initialize google maps')
+    throw new Error(
+      'Map container not found. Unable to initialize google maps')
   }
 
   const flvm = new FilteredLocationViewModel(
@@ -31,7 +32,7 @@ ready(() => {
     // Filter out markers on changes
     flvm.filtered.subscribe((changes) => {
       const names = changes.map(change => change.name)
-      // Clear out existing markers
+      // Change up existing markers
       markers.forEach((pair) => {
         if (names.indexOf(pair.title) === -1) {
           pair.setVisible(false)
@@ -43,12 +44,25 @@ ready(() => {
 
     // Set initial markers from computed
     flvm.filtered().forEach((location) => {
-      let marker = new google.maps.Marker({
-        title: location.name,
-        position: location.coords
+      const infoWindow = new google.maps.InfoWindow({
+        content: `<h3>${location.name}</h3>`
       })
+      
+      const marker = new google.maps.Marker({
+        title: location.name,
+        position: location.coords,
+        animation: google.maps.Animation.DROP
+      })
+      
+      marker.addListener('click', () => {
+        infoWindow.open(map, marker)
+      })
+      
       marker.setMap(map)
-      markers.set(location.name, marker)
+      
+      if (!markers.has(location.name)) {
+        markers.set(location.name, marker)
+      }
     })
 
     applyBindings(flvm)
