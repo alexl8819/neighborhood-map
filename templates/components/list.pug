@@ -1,0 +1,3 @@
+ul#locations(data-bind="foreach: filtered")
+  li.animated.fadeInDown(data-bind="css: { active: $parent.active() === name }")
+    a(data-bind="text: name, click: $parent.select", href="#")

@@ -1,67 +1,91 @@
-const ready = require('document-ready')
-const GoogleMapsLoader = require('google-maps')
-const applyBindings = require('knockout/build/output/knockout-latest').applyBindings
+var ready = require('document-ready')
+var GoogleMapsLoader = require('google-maps')
+var applyBindings = require('knockout/build/output/knockout-latest').applyBindings
 
-const FilteredLocationViewModel = require('./lib/viewmodels/location')
+var FilteredLocationViewModel = require('./lib/viewmodels/location')
 
-const config = require('./config.json')
+var config = require('./config.json')
 
 GoogleMapsLoader.KEY = config.google_maps_api.key
 GoogleMapsLoader.LANGUAGE = config.google_maps_api.language
 GoogleMapsLoader.REGION = config.google_maps_api.region
 
-ready(() => {
-  const container = document.querySelector('#map')
-  const markers = new Map()
+ready(function () {
+  var container = document.querySelector('#map')
+  var markers = {}
 
   if (!container) {
     throw new Error(
       'Map container not found. Unable to initialize google maps')
   }
 
-  const flvm = new FilteredLocationViewModel(
-    config.default_locations || [])
+  var flvm = FilteredLocationViewModel(config.default_locations || [])
 
-  GoogleMapsLoader.load((google) => {
-    const map = new google.maps.Map(container, {
+  GoogleMapsLoader.load(function (google) {
+    var map = new google.maps.Map(container, {
       center: config.center,
       zoom: 11,
       fullscreenControl: true
     })
 
-    // Filter out markers on changes
-    flvm.filtered.subscribe((changes) => {
-      const names = changes.map(change => change.name)
-      // Change up existing markers
-      markers.forEach((pair) => {
-        if (names.indexOf(pair.title) === -1) {
-          pair.setVisible(false)
+    // Subscribe to 'active' selection
+    flvm.active.subscribe(function (active) {
+      // Iterate markers and clear/set animations
+      Object.keys(markers).forEach(function (name) {
+        var marker = markers[name]
+
+        if (name === active) {
+          marker.setAnimation(google.maps.Animation.BOUNCE)
         } else {
-          pair.setVisible(true)
+          marker.infoWindow.close()
+          marker.setAnimation(null)
+        }
+      })
+    })
+
+    // Subscribe to changes on computed
+    flvm.filtered.subscribe(function (changes) {
+      var names = changes.map(function (change) {
+        return change.name
+      })
+
+      flvm.select(null)
+      
+      // Filter out existing markers
+      Object.keys(markers).forEach(function (name) {
+        var marker = markers[name]
+
+        if (names.indexOf(name) === -1) {
+          marker.infoWindow.close()
+          marker.setAnimation(null)
+          marker.setVisible(false)
+        } else {
+          marker.setVisible(true)
         }
       })
     })
 
     // Set initial markers from computed
-    flvm.filtered().forEach((location) => {
-      const infoWindow = new google.maps.InfoWindow({
-        content: `<h3>${location.name}</h3>`
-      })
-      
-      const marker = new google.maps.Marker({
+    flvm.filtered().forEach(function (location) {
+      var marker = new google.maps.Marker({
         title: location.name,
         position: location.coords,
         animation: google.maps.Animation.DROP
       })
+
+      marker.infoWindow = new google.maps.InfoWindow({
+        content: '<h3>' + location.name + '</h3>'
+      })
       
-      marker.addListener('click', () => {
-        infoWindow.open(map, marker)
+      marker.addListener('click', function () {
+        flvm.select(location)
+        marker.infoWindow.open(map, marker)
       })
       
       marker.setMap(map)
       
-      if (!markers.has(location.name)) {
-        markers.set(location.name, marker)
+      if (!markers.hasOwnProperty(location.name)) {
+        markers[location.name] = marker
       }
     })
 

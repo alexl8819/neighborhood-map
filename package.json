@@ -14,12 +14,13 @@
   "private": true,
   "dependencies": {
     "animate.css": "^3.5.2",
-    "debug": "^3.0.1",
     "document-ready": "^2.0.1",
+    "fastparallel": "^2.3.0",
     "google-maps": "^3.2.1",
     "knockout": "^3.4.2",
     "normalize.css": "^7.0.0",
-    "ramda": "^0.24.1"
+    "ramda": "^0.24.1",
+    "simple-get": "^2.7.0"
   },
   "devDependencies": {
     "browserify": "^14.4.0",

@@ -3,9 +3,6 @@ header
   label.entypo-menu(data-function="toggle-offcanvas", for="toggle")
   div.offcanvas
     h2 Locations
-    input#search(type="text", placeholder="BART San Francisco", data-bind="textInput: search")
+    include search.pug
     nav
-      ul#locations(data-bind="foreach: filtered")
-        li.animated.fadeInDown(data-bind="css: { active: false }")
-          a(data-bind="text: name, click: $parent.select", href="#")
-
+      include list.pug
