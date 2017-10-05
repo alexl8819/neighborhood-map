@@ -1,6 +1,7 @@
 var ready = require('document-ready')
 var GoogleMapsLoader = require('google-maps')
 var applyBindings = require('knockout/build/output/knockout-latest').applyBindings
+var parallel = require('fastparallel')({ results: true })
 
 var FilteredLocationViewModel = require('./lib/viewmodels/location')
 
@@ -66,8 +67,13 @@ ready(function () {
       })
     })
 
+    var initial = flvm.filtered()
+
+    parallel({}, [], null, function (err) {
+    })
+
     // Set initial markers from computed
-    flvm.filtered().forEach(function (location) {
+    initial.forEach(function (location) {
       var marker = new google.maps.Marker({
         title: location.name,
         position: location.coords,
