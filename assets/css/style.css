@@ -5,6 +5,20 @@
 
 /* thanks to author Stingy (https://codepen.io/rbardtke/pen/nfkdb) for offcanvas css */
 
+@media screen and (min-width: 1024px) {
+  input[data-function*="toggle-offcanvas"] ~ label[data-function*="toggle-offcanvas"] {
+    transform: translate3d(260px, 0, 0);
+  }
+
+  input[data-function*="toggle-offcanvas"] ~ .offcanvas {
+    transform: translate3d(0, 0, 0);
+  }
+
+  label[data-function*="toggle-offcanvas"] {
+    display: none !important;
+  }
+}
+
 *,
 *:before, 
 *:after {

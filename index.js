@@ -36,6 +36,7 @@ ready(function () {
 
         if (name === active) {
           marker.setAnimation(google.maps.Animation.BOUNCE)
+          marker.infoWindow.open(map, marker)
         } else {
           marker.infoWindow.close()
           marker.setAnimation(null)
@@ -43,7 +44,7 @@ ready(function () {
       })
     })
 
-    // Subscribe to changes on computed
+    // Subscribe to 'changes' on computed filter
     flvm.filtered.subscribe(function (changes) {
       var names = changes.map(function (change) {
         return change.name
@@ -51,7 +52,7 @@ ready(function () {
 
       flvm.select(null)
       
-      // Filter out existing markers
+      // Show only markers found in filter
       Object.keys(markers).forEach(function (name) {
         var marker = markers[name]
 
@@ -79,7 +80,6 @@ ready(function () {
       
       marker.addListener('click', function () {
         flvm.select(location)
-        marker.infoWindow.open(map, marker)
       })
       
       marker.setMap(map)
