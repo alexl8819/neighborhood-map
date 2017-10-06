@@ -15,6 +15,10 @@ module.exports={
       "coords": {
         "lat": 37.8036197,
         "lng": -122.2738137
+      },
+      "wikipedia": {
+        "pageid": 2178282,
+        "image": "File:Lower_platform_at_12th_Street_-_Oakland_City_Center,_July_2017.JPG"
       }
     },
     {
@@ -22,6 +26,10 @@ module.exports={
       "coords": {
         "lat": 37.7661763,
         "lng": -122.4298414
+      },
+      "wikipedia": {
+        "pageid": 2146354,
+        "image": "File:16thMission BART station.jpg"
       }
     },
     {
@@ -29,6 +37,10 @@ module.exports={
       "coords": {
         "lat": 37.8088376,
         "lng": -122.2705416
+      },
+      "wikipedia": {
+        "pageid": 2178402,
+        "image": "File:19th Street-Oakland BART.jpg"
       }
     },
     {
@@ -36,6 +48,10 @@ module.exports={
       "coords": {
         "lat": 37.7522493,
         "lng": -122.4206475
+      },
+      "wikipedia": {
+        "pageid": 2146362,
+        "image": "File:24th Street Mission Station 2976 14.JPG"
       }
     },
     {
@@ -43,6 +59,10 @@ module.exports={
       "coords": {
         "lat": 37.8528871,
         "lng": -122.2721716
+      },
+      "wikipedia": {
+        "pageid": 2204042,
+        "image": "File:Ashby BART 2701.JPG"
       }
     }
   ]
@@ -55,7 +75,7 @@ var ready=require("document-ready"),GoogleMapsLoader=require("google-maps"),appl
 function Location(o,n){if(!(this instanceof Location))return new Location(o,n);this.name=o,this.coords=n}Location.create=function(o,n){return new Location(o,n)},module.exports=Location;
 
 },{}],4:[function(require,module,exports){
-function FilteredLocationViewModel(e){if(!(this instanceof FilteredLocationViewModel))return new FilteredLocationViewModel(e);var t=e.map(function(e){return Location.create(e.name,e.coords)});this.locations=observableArray(t),this.search=observable(""),this.active=observable(""),this.filtered=pureComputed(function(){var e=this.search();return e?arrayFilter(this.locations(),function(t){return t.name.toLowerCase().indexOf(e.toLowerCase())>-1}):this.locations()},this),this.select=function(e){this.active(e&&e.name?e.name:"")}.bind(this)}var observable=require("knockout/build/output/knockout-latest").observable,observableArray=require("knockout/build/output/knockout-latest").observableArray,pureComputed=require("knockout/build/output/knockout-latest").pureComputed,arrayFilter=require("knockout/build/output/knockout-latest").utils.arrayFilter,Location=require("../models/location");module.exports=FilteredLocationViewModel;
+function FilteredLocationViewModel(e){if(!(this instanceof FilteredLocationViewModel))return new FilteredLocationViewModel(e);var t=e.map(function(e){return Location.create(e.name,e.coords)});this.locations=observableArray(t),this.search=observable(""),this.active=observable(""),this.filtered=pureComputed(function(){var e=this.search();return e?arrayFilter(this.locations(),function(t){return t.name.toLowerCase().indexOf(e.toLowerCase())>-1}):this.locations()},this),this.select=pureComputed(function(e){this.active(e&&e.name?e.name:"")},this)}var observable=require("knockout/build/output/knockout-latest").observable,observableArray=require("knockout/build/output/knockout-latest").observableArray,pureComputed=require("knockout/build/output/knockout-latest").pureComputed,arrayFilter=require("knockout/build/output/knockout-latest").utils.arrayFilter,Location=require("../models/location");module.exports=FilteredLocationViewModel;
 
 },{"../models/location":3,"knockout/build/output/knockout-latest":8}],5:[function(require,module,exports){
 (function (global){

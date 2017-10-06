@@ -1,15 +1,25 @@
 var ready = require('document-ready')
 var GoogleMapsLoader = require('google-maps')
+var localForage = require('localforage')
 var applyBindings = require('knockout/build/output/knockout-latest').applyBindings
-var parallel = require('fastparallel')({ results: true })
+var fastfall = require('fastfall')({ results: true })
 
 var FilteredLocationViewModel = require('./lib/viewmodels/location')
+var Wikipedia = require('./lib/models/wikipedia')
 
 var config = require('./config.json')
+
+var LOCATIONS_KEY = 'locations'
+var LS_SUPPORTED = localForage.supports(localForage.LOCALSTORAGE)
 
 GoogleMapsLoader.KEY = config.google_maps_api.key
 GoogleMapsLoader.LANGUAGE = config.google_maps_api.language
 GoogleMapsLoader.REGION = config.google_maps_api.region
+
+localForage.config({
+  driver: localForage.LOCALSTORAGE,
+  name: 'neighborhood-app'
+})
 
 ready(function () {
   var container = document.querySelector('#map')
@@ -20,7 +30,7 @@ ready(function () {
       'Map container not found. Unable to initialize google maps')
   }
 
-  var flvm = FilteredLocationViewModel(config.default_locations || [])
+  var flvm = FilteredLocationViewModel(defaultLocations)
 
   GoogleMapsLoader.load(function (google) {
     var map = new google.maps.Map(container, {
@@ -66,11 +76,20 @@ ready(function () {
         }
       })
     })
-
+    
+    // Run initial map build step
     var initial = flvm.filtered()
 
-    parallel({}, [], null, function (err) {
-    })
+    if (LS_SUPPORTED) {
+      return localForage
+        .getItem(LOCATIONS_KEY, function (err, value) {
+          if (err || 
+            (!locations || !Array.isArray(locations))) {
+              return createInitial(locations)
+            }
+          //
+        })
+    }
 
     // Set initial markers from computed
     initial.forEach(function (location) {
@@ -80,8 +99,10 @@ ready(function () {
         animation: google.maps.Animation.DROP
       })
 
+      var content = '<h3>' + location.name + '</h3>'
+
       marker.infoWindow = new google.maps.InfoWindow({
-        content: '<h3>' + location.name + '</h3>'
+        content: content
       })
       
       marker.addListener('click', function () {
