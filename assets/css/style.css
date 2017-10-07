@@ -34,7 +34,7 @@ body {
 
 body {
   font-family: 'Open Sans', sans-serif;
-  background-color: #0b2161;
+  font-size: 1rem;
   overflow-x: hidden;
 }
 
@@ -82,6 +82,16 @@ label[data-function*="toggle-offcanvas"] {
   transition: transform .3s;
 }
 
+.entypo-menu {
+  font-size: 2rem;
+}
+
+.wrapper,
+.offcanvas {
+  color: #fafafa;
+  background-color: #0B2147;
+}
+
 .wrapper {
   display: flex;
   min-height: 100%;
@@ -102,8 +112,6 @@ label[data-function*="toggle-offcanvas"] {
   width: 260px;
   left: 0;
   z-index: 2;
-  color: #f2f2f2;
-  background-color: #0b2161;
   border-right: 2px solid #0b114c;
   transition: all .3s;
 }
@@ -140,7 +148,7 @@ label[data-function*="toggle-offcanvas"] {
 }
 
 #map {
-  background-color: #ffffff;
+  background-color: transparent;
   position: absolute;
   left: 0;
   top: 70px;
@@ -148,6 +156,17 @@ label[data-function*="toggle-offcanvas"] {
   bottom: 0;
 }
 
-.entypo-menu {
-  font-size: 32px;
+.infowindow {
+  color: #000000;
+}
+
+.infowindow img {
+  float: left;
+  width: 100px;
+  height: 100px;
+  margin: 2px 5px 0;
+}
+
+.infowindow p {
+  text-align: justify;
 }

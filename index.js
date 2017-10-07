@@ -51,11 +51,12 @@ ready(function () {
         return done(null, locations, true)
       }
       
-      var pids = locations.map(function (location) {
+      // Get associated wiki pageid from each location
+      var pageids = locations.map(function (location) {
         return location.wikipedia.pageid
       })
 
-      Wikipedia.getDescriptions(pids, function (err, descriptions) {
+      Wikipedia.getDescriptions(pageids, function (err, descriptions) {
         if (err) {
           // Silently fail, as we don't depend on this 
           console.error(err)
@@ -83,6 +84,7 @@ ready(function () {
         return done(null, locations, true)
       }
 
+      // Get associated wiki image file from each location
       var files = locations.map(function (location) {
         return location.wikipedia.file
       })
@@ -128,13 +130,21 @@ ready(function () {
       done(null, locations)
     }
   ], function (err, locations) {
+    if (err) {
+      // This should never happen
+      // Stop and alert, something serious went wrong
+      return alert(err.message)
+    }
+
     var flvm = FilteredLocationViewModel(locations)
 
+    // Load up google maps assets
     GoogleMapsLoader.load(function (google) {
       var markers = {}
+      // Mount map on container
       var map = new google.maps.Map(container, {
         center: config.center,
-        zoom: 11,
+        zoom: 10,
         fullscreenControl: true
       })
 
@@ -143,7 +153,8 @@ ready(function () {
         // Iterate markers and clear/set animations
         Object.keys(markers).forEach(function (name) {
           var marker = markers[name]
-
+          
+          // Reset marker animation and infoWindow state only
           if (name === active) {
             marker.setAnimation(google.maps.Animation.BOUNCE)
             marker.infoWindow.open(map, marker)
@@ -159,13 +170,16 @@ ready(function () {
         var names = changes.map(function (change) {
           return change.name
         })
-
+        
+        // Reset selected marker
         flvm.select(null)
       
         // Show only markers found in filter
         Object.keys(markers).forEach(function (name) {
           var marker = markers[name]
 
+          // Reset marker visibility, animation
+          // and infoWindow state
           if (names.indexOf(name) === -1) {
             marker.infoWindow.close()
             marker.setAnimation(null)
@@ -183,10 +197,14 @@ ready(function () {
           position: location.coords,
           animation: google.maps.Animation.DROP
         })
-
-        var content = '<h3>' + location.name + '</h3>' +
-          (location.wiki.image ? '<img src="' + location.wiki.image + '" width=75 height=75 />' : '') +
-          '<p>' + (location.wiki.description || '?') + '</p>'
+        
+        // Create basic content box
+        var content = '<div class="infowindow">' + 
+          '<h2>' + location.name + '</h2>' +
+          (location.wiki.image ? '<img src="' + location.wiki.image + 
+            '" rel="' + location.name + '" />' : '') +
+          '<p>' + (location.wiki.description || '?') + '</p>' +
+          '</div>'
 
         marker.infoWindow = new google.maps.InfoWindow({
           content: content
@@ -202,7 +220,8 @@ ready(function () {
           markers[location.name] = marker
         }
       })
-
+      
+      // Finally, bind the view model to the view
       applyBindings(flvm)
     })
   })
