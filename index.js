@@ -29,16 +29,25 @@ ready(function () {
     throw new Error(
       'Map container not found. Unable to initialize google maps')
   }
-  
+
   fall([
     // Get stored location information from LS if available
     function (done) {
       if (LS_SUPPORTED) {
         return localForage.getItem(LOCATIONS_KEY, function (err, locations) {
+          // Fallback to default locations if not found or not valid array
           if (err || (!locations || !Array.isArray(locations))) {
+            console.error(err)
             return done(null, config.default_locations, false)
           }
-          
+
+          // Delete from store and re-run if the configuration file has changed
+          if (locations.length !== config.default_locations.length) {
+            return localForage.removeItem(LOCATIONS_KEY, function (err) {
+              done(err, config.default_locations, false)
+            })
+          }
+
           done(null, locations, true)
         })
       }
@@ -47,10 +56,11 @@ ready(function () {
     },
     // Fetch location descriptions
     function (locations, complete, done) {
+      // If marked complete, no need to re-fetch
       if (complete) {
         return done(null, locations, true)
       }
-      
+
       // Get associated wiki pageid from each location
       var pageids = locations.map(function (location) {
         return location.wikipedia.pageid
@@ -58,7 +68,7 @@ ready(function () {
 
       Wikipedia.getDescriptions(pageids, function (err, descriptions) {
         if (err) {
-          // Silently fail, as we don't depend on this 
+          // Silently fail, as we don't depend on this
           console.error(err)
           // Complete but don't persist
           return done(null, locations, true)
@@ -80,6 +90,7 @@ ready(function () {
     },
     // Fetch location images
     function (locations, complete, done) {
+      // If marked complete, no need to re-fetch
       if (complete) {
         return done(null, locations, true)
       }
@@ -120,9 +131,9 @@ ready(function () {
       if (LS_SUPPORTED) {
         return localForage.setItem(LOCATIONS_KEY, locations, function (err) {
           if (err) {
-            console.error(err)
+            return done(err)
           }
-          
+
           done(null, locations)
         })
       }
@@ -132,10 +143,12 @@ ready(function () {
   ], function (err, locations) {
     if (err) {
       // This should never happen
-      // Stop and alert, something serious went wrong
-      return alert(err.message)
+      // If it does stop and alert, something serious went wrong
+      // TODO: Use something other than alert to make user aware
+      return window.alert(err.message + '. Please reload the page')
     }
 
+    // Initialize and populate view model
     var flvm = FilteredLocationViewModel(locations)
 
     // Load up google maps assets
@@ -144,7 +157,7 @@ ready(function () {
       // Mount map on container
       var map = new google.maps.Map(container, {
         center: config.center,
-        zoom: 10,
+        zoom: 11,
         fullscreenControl: true
       })
 
@@ -153,7 +166,7 @@ ready(function () {
         // Iterate markers and clear/set animations
         Object.keys(markers).forEach(function (name) {
           var marker = markers[name]
-          
+
           // Reset marker animation and infoWindow state only
           if (name === active) {
             marker.setAnimation(google.maps.Animation.BOUNCE)
@@ -170,10 +183,10 @@ ready(function () {
         var names = changes.map(function (change) {
           return change.name
         })
-        
+
         // Reset selected marker
         flvm.select(null)
-      
+
         // Show only markers found in filter
         Object.keys(markers).forEach(function (name) {
           var marker = markers[name]
@@ -197,30 +210,31 @@ ready(function () {
           position: location.coords,
           animation: google.maps.Animation.DROP
         })
-        
+
         // Create basic content box
-        var content = '<div class="infowindow">' + 
+        // TODO: Nicer way to make the HTML
+        var content = '<div class="infowindow">' +
           '<h2>' + location.name + '</h2>' +
-          (location.wiki.image ? '<img src="' + location.wiki.image + 
-            '" rel="' + location.name + '" />' : '') +
-          '<p>' + (location.wiki.description || '?') + '</p>' +
-          '</div>'
+          (location.wiki.image ? '<img src="' + location.wiki.image +
+          '" rel="' + location.name + '" />' : '') +
+          '<p>' + (location.wiki.description ||
+                   'No information available.') + '</p>' + '</div>'
 
         marker.infoWindow = new google.maps.InfoWindow({
           content: content
         })
-      
+
         marker.addListener('click', function () {
           flvm.select(location)
         })
-      
+
         marker.setMap(map)
-      
+
         if (!markers.hasOwnProperty(location.name)) {
           markers[location.name] = marker
         }
       })
-      
+
       // Finally, bind the view model to the view
       applyBindings(flvm)
     })

@@ -1,13 +1,16 @@
 doctype html
 html(lang="en")
   head
-    title Neighborhood Map
     meta(charset="utf-8")
+    meta(name="author", content="unaffiliated")
+    meta(name="description", content="Search and view the nearest BART locations")
+    meta(name="keywords", content="BART, google maps, wikipedia, san francisco, california")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Neighborhood Map - BART Neighborhood
     link(rel="stylesheet" href="style.min.css")
   body
     noscript JavaScript must be enabled for this app to work correctly
     div.wrapper
       include components/header.pug
       block content
-    script(src="bundle.js")
+    script(src="bundle.min.js")

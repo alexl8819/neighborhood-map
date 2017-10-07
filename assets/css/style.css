@@ -17,6 +17,10 @@
   label[data-function*="toggle-offcanvas"] {
     display: none !important;
   }
+
+  #map {
+    left: 260px !important;
+  }
 }
 
 *,
@@ -132,9 +136,17 @@ label[data-function*="toggle-offcanvas"] {
   border: none;
 }
 
-#locations li {
+#locations li,
+#locations li a {
   width: 100%;
+}
+
+#locations li {
   padding: 5px 3px;
+}
+
+#locations li a {
+  display: block;
 }
 
 #locations .active,

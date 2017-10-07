@@ -1,14 +1,15 @@
 {
   "name": "neighborhood-map",
   "version": "1.0.0",
-  "description": "",
+  "description": "View and filter BART locations in the nearest neighborhood",
   "main": "index.js",
   "scripts": {
-    "build:dev:js": "./node_modules/browserify/bin/cmd.js index.js -o public/bundle.js",
-    "build:js": "./node_modules/browserify/bin/cmd.js -g uglifyify index.js -o public/bundle.js",
+    "build:dev:js": "./node_modules/browserify/bin/cmd.js index.js -o public/app.js",
+    "build:js": "./node_modules/browserify/bin/cmd.js -g uglifyify index.js -o public/app.min.js",
     "build:templates": "./node_modules/pug-cli/index.js templates/index.pug -o public/",
     "minify:css": "./node_modules/clean-css-cli/bin/cleancss --inline all -o public/style.min.css assets/css/*.css",
-    "test": "standard"
+    "start": "http-server public/",
+    "test": "./node_modules/standard/bin/cmd.js && ./node_modules/css-validator/bin/css-validator public/style.min.css"
   },
   "author": "unaffiliated",
   "license": "MIT",
@@ -28,7 +29,8 @@
     "browserify": "^14.4.0",
     "browserify-transform-tools": "^1.7.0",
     "clean-css-cli": "^4.1.10",
-    "es2020": "^1.1.9",
+    "css-validator": "^0.8.0",
+    "http-server": "^0.10.0",
     "lighthouse": "^2.4.0",
     "pug-cli": "^1.0.0-alpha6",
     "standard": "^10.0.3",
