@@ -1,1 +1,1 @@
-input#search(type="text", placeholder="Oakland Station", data-bind="textInput: search, ")
+input#search(type="text", placeholder="Oakland Station", data-bind="attr: { disabled: locations().length === 0 }, textInput: search")
