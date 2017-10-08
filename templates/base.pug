@@ -8,8 +8,10 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     title Neighborhood Map - BART Neighborhood
     link(rel="stylesheet" href="style.min.css")
-  body
+  body.loading
     noscript JavaScript must be enabled for this app to work correctly
+    div#loading-text
+      h1.animated.fadeIn Loading...
     div.wrapper
       include components/header.pug
       block content

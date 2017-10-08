@@ -37,7 +37,9 @@ ready(function () {
         return localForage.getItem(LOCATIONS_KEY, function (err, locations) {
           // Fallback to default locations if not found or not valid array
           if (err || (!locations || !Array.isArray(locations))) {
-            console.error(err)
+            if (err instanceof Error) {
+              console.error(err)
+            }
             return done(null, config.default_locations, false)
           }
 
@@ -147,6 +149,12 @@ ready(function () {
       // TODO: Use something other than alert to make user aware
       return window.alert(err.message + '. Please reload the page')
     }
+    
+    // Modify DOM
+    // Since bindings aren't applied until after
+    // everything has loaded, try removing loading 
+    // animations as soon as possible
+    document.body.className = ''
 
     // Initialize and populate view model
     var flvm = FilteredLocationViewModel(locations)

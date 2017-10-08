@@ -40,6 +40,30 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-size: 1rem;
   overflow-x: hidden;
+  transition: opacity 1s ease-in;
+}
+
+body.loading {
+  background-color: #0B2147;
+  z-index: 3;
+}
+
+body.loading main {
+  opacity: 0;
+  transition: opacity 0;
+}
+
+body.loading #loading-text {
+  display: block !important;
+  position: absolute;
+  top: 300px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+body.loading .offcanvas {
+  display: none;
 }
 
 [class*="entypo-"]:before {
@@ -90,6 +114,7 @@ label[data-function*="toggle-offcanvas"] {
   font-size: 2rem;
 }
 
+body.loading #loading-text,
 .wrapper,
 .offcanvas {
   color: #fafafa;
@@ -127,6 +152,11 @@ label[data-function*="toggle-offcanvas"] {
 
 .offcanvas ul {
   list-style-type: none;
+}
+
+#loading-text {
+  display: none;
+  text-align: center;
 }
 
 #search {
