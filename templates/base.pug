@@ -9,9 +9,10 @@ html(lang="en")
     title Neighborhood Map - BART Neighborhood
     link(rel="stylesheet" href="style.min.css")
   body.loading
-    noscript JavaScript must be enabled for this app to work correctly
     div#loading-text
       h1.animated.fadeIn Loading...
+      noscript 
+        strong JavaScript is currently disabled. Please re-enable to continue
     div.wrapper
       include components/header.pug
       block content
