@@ -1,6 +1,7 @@
 var ready = require('document-ready')
 var xtend = require('xtend')
 var GoogleMapsLoader = require('google-maps')
+var h = require('hyperscript')
 var localForage = require('localforage')
 var applyBindings = require('knockout/build/output/knockout-latest').applyBindings
 var fall = require('fastfall')()
@@ -149,10 +150,10 @@ ready(function () {
       // TODO: Use something other than alert to make user aware
       return window.alert(err.message + '. Please reload the page')
     }
-    
+
     // Modify DOM
     // Since bindings aren't applied until after
-    // everything has loaded, try removing loading 
+    // everything has loaded, try removing loading
     // animations as soon as possible
     document.body.className = ''
 
@@ -183,6 +184,12 @@ ready(function () {
             marker.infoWindow.close()
             marker.setAnimation(null)
           }
+
+          // Close dialog and reset selection when closed
+          google.maps.event.addListener(marker.infoWindow, 'closeclick', function () {
+            marker.setAnimation(null)
+            flvm.select(null)
+          })
         })
       })
 
@@ -220,24 +227,29 @@ ready(function () {
         })
 
         // Create basic content box
-        // TODO: Nicer way to make the HTML
-        var content = '<div class="infowindow">' +
-          '<h2>' + location.name + '</h2>' +
-          (location.wiki.image ? '<img src="' + location.wiki.image +
-          '" rel="' + location.name + '" />' : '') +
-          '<p>' + (location.wiki.description ||
-                   'No information available.') + '</p>' + '</div>'
+        var content = h('div.infowindow', {}, [
+          h('h2', {}, location.name),
+          h('img', {
+            rel: location.name,
+            src: location.wiki.image
+          }),
+          h('p', {}, location.wiki.description || 'No information available')
+        ])
 
+        // Initialize infowindow with content
         marker.infoWindow = new google.maps.InfoWindow({
           content: content
         })
 
+        // Listen for location selections
         marker.addListener('click', function () {
           flvm.select(location)
         })
 
+        // Place marker on map
         marker.setMap(map)
 
+        // Only add markers if they aren't already included
         if (!markers.hasOwnProperty(location.name)) {
           markers[location.name] = marker
         }

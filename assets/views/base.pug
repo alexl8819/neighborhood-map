@@ -1,0 +1,30 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="utf-8")
+    meta(name="author", content="unaffiliated")
+    meta(name="description", content="Search and view the nearest BART locations")
+    meta(name="keywords", content="BART, google maps, wikipedia, san francisco, california")
+    meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Neighborhood Map - BART Neighborhood
+    link(rel="dns-prefetch" href="//cdnjs.cloudflare.com")
+    link(rel="dns-prefetch" href="//fonts.googleapis.com")
+    link(rel="dns-prefetch" href="//maps.googleapis.com")
+    link(rel="dns-prefetch" href="//fonts.gstatic.com")
+    link(rel="dns-prefetch" href="//maps.gstatic.com")
+    link(rel="dns-prefetch" href="//upload.wikimedia.org")
+    link(rel="dns-prefetch" href="http://weloveiconfonts.com")
+    link(rel="stylesheet" href="http://weloveiconfonts.com/api/?family=entypo")
+    link(rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans")
+    link(rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous")
+    link(rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" integrity="sha256-HtCCUh9Hkh//8U1OwcbD8epVEUdBvuI8wj1KtqMhNkI=" crossorigin="anonymous")
+    link(rel="stylesheet" href="global.min.css")
+  body.loading
+    div#loading-text
+      h1.animated.fadeIn Loading...
+      noscript 
+        strong JavaScript is currently disabled. Please re-enable to continue
+    div.wrapper
+      include components/header.pug
+      block content
+    script(src="app.min.js")
