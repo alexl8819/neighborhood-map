@@ -1,3 +1,5 @@
+'use strict'
+
 var jsonp = require('jsonp')
 
 var WIKIMEDIA_API_BASE = 'https://en.wikipedia.org/w/api.php'

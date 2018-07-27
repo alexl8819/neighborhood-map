@@ -4,11 +4,11 @@
   "description": "View and filter BART locations in the nearest neighborhood",
   "main": "index.js",
   "scripts": {
-    "build:dev:js": "node_modules/browserify/bin/cmd.js index.js -o public/app.js",
-    "build:js": "node_modules/browserify/bin/cmd.js -g uglifyify index.js -o public/app.min.js",
+    "build:dev:js": "node_modules/browserify/bin/cmd.js assets/scripts/index.js -o public/app.js",
+    "build:js": "node_modules/browserify/bin/cmd.js -g uglifyify assets/scripts/index.js -o public/app.min.js",
     "build:views": "node_modules/pug-cli/index.js assets/views/index.pug -o public/",
     "minify:css": "node_modules/clean-css-cli/bin/cleancss --inline all -o public/global.min.css assets/styles/*.css",
-    "start": "http-server public/",
+    "start": "node index | pino",
     "test": "node_modules/standard/bin/cmd.js && node_modules/css-validator/bin/css-validator public/global.min.css"
   },
   "author": "unaffiliated",
@@ -16,19 +16,20 @@
   "private": true,
   "dependencies": {
     "document-ready": "^2.0.1",
+    "ecstatic": "^3.2.1",
     "fastfall": "^1.5.1",
     "google-maps": "^3.2.1",
     "hyperscript": "^2.0.2",
     "jsonp": "^0.2.1",
     "knockout": "^3.4.2",
     "localforage": "^1.5.0",
+    "pino": "^4.17.5",
     "xtend": "^4.0.1"
   },
   "devDependencies": {
     "browserify": "^14.4.0",
     "clean-css-cli": "^4.1.10",
     "css-validator": "^0.8.0",
-    "http-server": "^0.10.0",
     "lighthouse": "^2.4.0",
     "pug-cli": "^1.0.0-alpha6",
     "standard": "^10.0.3",

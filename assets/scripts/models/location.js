@@ -1,3 +1,5 @@
+'use strict'
+
 function Location (name, coords, wiki) {
   if (!(this instanceof Location)) {
     return new Location(name, coords, wiki)

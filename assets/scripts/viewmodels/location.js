@@ -1,3 +1,5 @@
+'use strict'
+
 var observable = require('knockout/build/output/knockout-latest').observable
 var observableArray = require('knockout/build/output/knockout-latest').observableArray
 var pureComputed = require('knockout/build/output/knockout-latest').pureComputed
