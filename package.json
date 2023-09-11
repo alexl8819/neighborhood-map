@@ -4,11 +4,12 @@
   "description": "View and filter BART locations in the nearest neighborhood",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build:views && npm run build:js && npm run minify:css",
     "build:dev:js": "node_modules/browserify/bin/cmd.js assets/scripts/index.js -o public/app.js",
     "build:js": "node_modules/browserify/bin/cmd.js -g uglifyify assets/scripts/index.js -o public/app.min.js",
     "build:views": "node_modules/pug-cli/index.js assets/views/index.pug -o public/",
     "minify:css": "node_modules/clean-css-cli/bin/cleancss --inline all -o public/global.min.css assets/styles/*.css",
-    "start": "node index | pino",
+    "dev": "node index | pino",
     "test": "node_modules/standard/bin/cmd.js && node_modules/css-validator/bin/css-validator public/global.min.css"
   },
   "author": "alexl8819",
