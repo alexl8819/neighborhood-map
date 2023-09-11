@@ -23,8 +23,5 @@ description and images and Google Maps.
 # TODO
 - Offline usage
 
-# Heroku
-Check out a live app [here](https://vast-journey-74005.herokuapp.com/)
-
 # License
 MIT

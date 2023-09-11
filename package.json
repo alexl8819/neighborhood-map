@@ -11,7 +11,7 @@
     "start": "node index | pino",
     "test": "node_modules/standard/bin/cmd.js && node_modules/css-validator/bin/css-validator public/global.min.css"
   },
-  "author": "unaffiliated",
+  "author": "alexl8819",
   "license": "MIT",
   "private": true,
   "dependencies": {
